@@ -35,6 +35,10 @@ export default async function PersonPage({ params }) {
       (person.motherId && p.motherId === person.motherId)
     )
   );
+    const isLiving =
+     !person.deathYear &&
+      person.birthYear &&
+      new Date().getFullYear() - person.birthYear < 120;
 
   const personDocs = documents
     .filter(doc => doc.personId === id)
