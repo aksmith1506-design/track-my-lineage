@@ -3,147 +3,164 @@
 import React, { useState, useEffect } from "react";
 import ReactFlow, { Background, Controls, MiniMap } from "reactflow";
 import "reactflow/dist/style.css";
+
 import { people } from "@/data/people";
 import PersonNode from "@/components/PersonNode";
 
 const nodeTypes = { person: PersonNode };
-const horizontalSpacing = 180;
-const verticalSpacing = 150;
+
+const horizontalSpacing = 220;
+const verticalSpacing = 160;
+
+const centerId = "1";
+
+function isLiving(person) {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    !person.deathYear &&
+    person.birthYear &&
+    currentYear - person.birthYear < 120
+  );
+}
 
 export default function TreePage() {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
-  const [expandedNodes, setExpandedNodes] = useState(new Set());
-  const centerId = "1"; // root person
+  const [expanded, setExpanded] = useState(new Set());
 
   const toggleExpand = (id) => {
-    setExpandedNodes((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(id)) newSet.delete(id);
-      else newSet.add(id);
-      return newSet;
+    setExpanded((prev) => {
+      const copy = new Set(prev);
+      copy.has(id) ? copy.delete(id) : copy.add(id);
+      return copy;
     });
   };
 
-  // Compute subtree width recursively
-  const computeSubtreeWidth = (personId) => {
-    const person = people[personId];
-    if (!person) return 0;
-    if (!expandedNodes.has(personId)) return 1;
-
-    const parentWidth =
-      (person.fatherId ? computeSubtreeWidth(person.fatherId) : 0) +
-      (person.motherId ? computeSubtreeWidth(person.motherId) : 0);
-
-    return Math.max(parentWidth, 1);
-  };
-
   useEffect(() => {
-    const newNodes = [];
-    const newEdges = [];
+    const nodes = [];
+    const edges = [];
     const visited = new Set();
 
-    // Recursive function to place node and children
-    const placeNode = (personId, generation = 0, xStart = 0) => {
-      const person = people[personId];
-      if (!person || visited.has(personId)) return xStart;
-      visited.add(personId);
-
-      let x = xStart;
-
-      // 1️⃣ Place parents first if expanded
-      if (expandedNodes.has(personId)) {
-        const parents = [];
-        if (person.fatherId) parents.push(person.fatherId);
-        if (person.motherId) parents.push(person.motherId);
-
-        const widths = parents.map((pid) => computeSubtreeWidth(pid));
-        const totalWidth = widths.reduce((a, b) => a + b, 0);
-        let parentX = x - ((totalWidth - 1) * horizontalSpacing) / 2;
-
-        parents.forEach((pid, index) => {
-          const w = widths[index];
-          const childCenterX = placeNode(pid, generation - 1, parentX);
-          parentX += w * horizontalSpacing;
-
-          newEdges.push({
-            id: `edge-${pid}-${person.id}`,
-            source: pid,
-            target: person.id,
-            type: "smoothstep",
-            style: { stroke: "#888", strokeWidth: 2 },
-          });
-        });
-      }
-
-      // 2️⃣ Place this node
-      newNodes.push({
+    function addNode(person, x, y) {
+      nodes.push({
         id: person.id,
         type: "person",
-        position: { x, y: generation * verticalSpacing },
-        data: { person, onToggleExpand: toggleExpand, isExpanded: expandedNodes.has(person.id) },
+        position: { x, y },
+        data: {
+          person,
+          isExpanded: expanded.has(person.id),
+          onToggleExpand: toggleExpand,
+        },
+      });
+    }
+
+    function buildTree(personId, x, y) {
+      const person = people[personId];
+      if (!person || visited.has(personId)) return;
+
+      visited.add(personId);
+
+      addNode(person, x, y);
+
+      if (!expanded.has(personId)) return;
+
+      /* -------- Parents -------- */
+
+      const parents = [person.fatherId, person.motherId].filter(Boolean);
+
+      parents.forEach((pid, i) => {
+        const parent = people[pid];
+        if (!parent) return;
+
+        const px = x + (i === 0 ? -horizontalSpacing : horizontalSpacing);
+        const py = y - verticalSpacing;
+
+        buildTree(pid, px, py);
+
+        edges.push({
+          id: `${pid}-${personId}`,
+          source: pid,
+          target: personId,
+          type: "smoothstep",
+        });
       });
 
-      // 3️⃣ Place spouses to the right
-      if (person.spouseIds && person.spouseIds.length > 0) {
-        person.spouseIds.forEach((spouseId, index) => {
-          const spouse = people[spouseId];
-          if (!spouse || visited.has(spouse.id)) return;
+      /* -------- Spouses -------- */
 
-          newNodes.push({
-            id: spouse.id,
-            type: "person",
-            position: { x: x + (index + 1) * horizontalSpacing, y: generation * verticalSpacing },
-            data: { person: spouse, onToggleExpand: toggleExpand, isExpanded: expandedNodes.has(spouse.id) },
-          });
+      if (person.spouseIds) {
+        person.spouseIds.forEach((sid, i) => {
+          const spouse = people[sid];
+          if (!spouse) return;
 
-          newEdges.push({
-            id: `spouse-${person.id}-${spouse.id}`,
-            source: person.id,
-            target: spouse.id,
+          const sx = x + (i + 1) * horizontalSpacing;
+          const sy = y;
+
+          addNode(spouse, sx, sy);
+
+          edges.push({
+            id: `${personId}-${sid}`,
+            source: personId,
+            target: sid,
             type: "smoothstep",
-            style: { stroke: "#888", strokeWidth: 2 },
           });
         });
       }
 
-      // 4️⃣ Place children centered under the parent
+      /* -------- Children -------- */
+
       const children = Object.values(people).filter(
-        (p) => p.fatherId === person.id || p.motherId === person.id
+        (p) => p.fatherId === personId || p.motherId === personId
       );
 
-      if (children.length > 0) {
-        const totalChildrenWidth = children.length * horizontalSpacing;
-        let childX = x - totalChildrenWidth / 2 + horizontalSpacing / 2;
+      const startX =
+        x - ((children.length - 1) * horizontalSpacing) / 2;
 
-        children.forEach((child) => {
-          placeNode(child.id, generation + 1, childX);
+      children.forEach((child, i) => {
+        const cx = startX + i * horizontalSpacing;
+        const cy = y + verticalSpacing;
 
-          newEdges.push({
-            id: `edge-${person.id}-${child.id}`,
-            source: person.id,
-            target: child.id,
-            type: "smoothstep",
-            style: { stroke: "#888", strokeWidth: 2 },
+        if (isLiving(child)) {
+          nodes.push({
+            id: `private-${child.id}`,
+            type: "person",
+            position: { x: cx, y: cy },
+            data: {
+              person: { firstName: "Private", lastName: "Individual" },
+              isPrivate: true,
+            },
           });
 
-          childX += horizontalSpacing;
+          edges.push({
+            id: `${personId}-private-${child.id}`,
+            source: personId,
+            target: `private-${child.id}`,
+          });
+
+          return;
+        }
+
+        buildTree(child.id, cx, cy);
+
+        edges.push({
+          id: `${personId}-${child.id}`,
+          source: personId,
+          target: child.id,
+          type: "smoothstep",
         });
-      }
+      });
+    }
 
-      return x;
-    };
+    buildTree(centerId, 0, 0);
 
-    placeNode(centerId, 0, 0);
-
-    setNodes(newNodes);
-    setEdges(newEdges);
-  }, [expandedNodes]);
+    setNodes(nodes);
+    setEdges(edges);
+  }, [expanded]);
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <div style={{ position: "absolute", zIndex: 10, padding: "10px" }}>
-        <a href="/" style={{ color: "#008cffff", fontWeight: "bold" }}>
+        <a href="/" style={{ color: "#0077cc", fontWeight: "bold" }}>
           Home
         </a>
       </div>
@@ -153,7 +170,6 @@ export default function TreePage() {
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
         nodesDraggable={false}
         nodesConnectable={false}
         panOnScroll
