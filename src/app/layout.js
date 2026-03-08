@@ -43,6 +43,10 @@ export const metadata = {
     type: "website",
   },
 
+  icons: {
+    icon: "/icon.png",
+  },
+
   twitter: {
     card: "summary_large_image",
     title: "Track My Lineage",
