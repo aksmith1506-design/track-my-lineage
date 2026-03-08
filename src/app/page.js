@@ -13,12 +13,12 @@ export default function Home() {
   const totalDocuments = documents.length;
 
   return (
-    <main style={{ maxWidth: "1000px", margin: "auto", padding: "40px" }}>
+    <main style={{ maxWidth: "1000px", margin: "auto", padding: "30px 20px" }}>
 
-      {/* HERO SECTION */}
+      {/* HERO */}
 
       <div style={{ marginBottom: "40px" }}>
-        <div style={{ fontSize: "36px", fontWeight: "bold", marginBottom: "10px" }}>
+        <div style={{ fontSize: "34px", fontWeight: "bold", marginBottom: "10px" }}>
           TrackMyLineage.com
         </div>
 
@@ -28,15 +28,17 @@ export default function Home() {
         </p>
       </div>
 
+      {/* STATS */}
 
-      {/* SITE STATS */}
-
-      <div style={{
-        display: "flex",
-        gap: "40px",
-        marginBottom: "40px",
-        fontSize: "18px"
-      }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "30px",
+          marginBottom: "40px",
+          fontSize: "18px"
+        }}
+      >
         <div>
           <div style={{ fontWeight: "bold", fontSize: "24px" }}>
             {totalPeople}
@@ -52,15 +54,16 @@ export default function Home() {
         </div>
       </div>
 
+      {/* NAV CARDS */}
 
-      {/* NAVIGATION CARDS */}
-
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(220px,1fr))",
-        gap: "20px",
-        marginBottom: "50px"
-      }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))",
+          gap: "20px",
+          marginBottom: "50px"
+        }}
+      >
 
         <Link href="/people" style={{
           border: "1px solid #ddd",
@@ -76,7 +79,6 @@ export default function Home() {
           Browse all individuals in the genealogy archive.
         </Link>
 
-
         <Link href="/tree" style={{
           border: "1px solid #ddd",
           borderRadius: "8px",
@@ -90,7 +92,6 @@ export default function Home() {
           </div>
           Explore relationships through the interactive tree.
         </Link>
-
 
         <Link href="/about" style={{
           border: "1px solid #ddd",
@@ -108,8 +109,7 @@ export default function Home() {
 
       </div>
 
-
-      {/* FEATURED PERSON */}
+      {/* FEATURED */}
 
       <div>
 
@@ -135,7 +135,7 @@ export default function Home() {
           <div style={{ marginTop: "10px" }}>
             <Link
               href={`/person/${createSlug(featured)}`}
-              style={{ color: "#008cffff" }}
+              style={{ color: "#008cff" }}
             >
               View profile →
             </Link>
