@@ -44,7 +44,9 @@ export const metadata = {
   },
 
   icons: {
-    icon: "/icon.png",
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 
   twitter: {
@@ -55,6 +57,11 @@ export const metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -62,9 +69,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
-
         {children}
-
       </body>
     </html>
   );

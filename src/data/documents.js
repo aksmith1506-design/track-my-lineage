@@ -103,5 +103,14 @@ export const documents = [
     relevance: 9,              // higher = more important
     description: "Portrait of a young Angelo Palmisano."
   },
+  {
+    id: "14",
+    personIds: ["20"],              // Ayden
+    fileName: "AngeloPalmisano2.jpg",
+    type: "photo",              // photo, certificate, record, etc.
+    relevance: 10,              // higher = more important
+    description: "Portrait of Angelo Palmisano."
+  },
+
 
 ];
