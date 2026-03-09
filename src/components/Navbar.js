@@ -12,8 +12,9 @@ export default function Navbar() {
         <Link href="/">TrackMyLineage.com</Link>
       </div>
 
+      {/* Hamburger Button */}
       <button
-        className="hamburger"
+        className={`hamburger ${isOpen ? "open" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Toggle menu"
       >
@@ -22,6 +23,7 @@ export default function Navbar() {
         <span />
       </button>
 
+      {/* Nav Links */}
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
         <Link href="/">Home</Link>
         <Link href="/tree">Tree</Link>
@@ -53,6 +55,7 @@ export default function Navbar() {
           text-decoration: none;
         }
 
+        /* Hamburger Styles */
         .hamburger {
           display: none;
           flex-direction: column;
@@ -63,6 +66,7 @@ export default function Navbar() {
           border: none;
           cursor: pointer;
           padding: 0;
+          z-index: 1100;
         }
 
         .hamburger span {
@@ -71,8 +75,23 @@ export default function Navbar() {
           width: 100%;
           background-color: white;
           border-radius: 2px;
+          transition: all 0.3s ease;
         }
 
+        /* Hamburger animation to X */
+        .hamburger.open span:nth-child(1) {
+          transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.open span:nth-child(2) {
+          opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+          transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Desktop Links */
         .nav-links {
           display: flex;
           gap: 20px;
@@ -81,6 +100,11 @@ export default function Navbar() {
         .nav-links a {
           color: white;
           text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+          color: #f0a500;
         }
 
         /* Mobile Styles */
@@ -92,12 +116,13 @@ export default function Navbar() {
           .nav-links {
             flex-direction: column;
             width: 100%;
-            display: none;
-            margin-top: 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
           }
 
           .nav-links.open {
-            display: flex;
+            max-height: 500px; /* large enough to show all links */
           }
 
           .nav-links a {
