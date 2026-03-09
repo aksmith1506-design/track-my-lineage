@@ -171,14 +171,14 @@ export const people = {
     deathYear: 2016,
     deathPlace: null,
 
-    fatherId: null,
-    motherId: null,
+    fatherId: "10",
+    motherId: "11",
 
     spouseIds: ["9"],
 
     occupation: null,
 
-    notes: "",
+    notes: "Gerald Regan Jr. was named after his father.",
 
     sources: []
   },
@@ -193,10 +193,318 @@ export const people = {
     deathYear: 2018,
     deathPlace: "Endwell, Broome County, New York, USA",
 
+    fatherId: "16",
+    motherId: "17",
+
+    spouseIds: ["8"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    10: {
+    id: "10",
+    firstName: "Gerald",
+    lastName: "Regan",
+
+    birthYear: 1894,
+    birthPlace: null,
+
+    deathYear: null,
+    deathPlace: null,
+
+    fatherId: "12",
+    motherId: "13",
+
+    spouseIds: ["11"],
+
+    occupation: null,
+
+    notes: "Gerald Williams Regan was adopted.",
+
+    sources: []
+  },
+    11: {
+    id: "11",
+    firstName: "Ruth",
+    lastName: "Kline",
+
+    birthYear: 1903,
+    birthPlace: null,
+
+    deathYear: 1980,
+    deathPlace: null,
+
+    fatherId: "14",
+    motherId: "15",
+
+    spouseIds: ["10"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    12: {
+    id: "12",
+    firstName: "William",
+    lastName: "Regan",
+
+    birthYear: 1860,
+    birthPlace: null,
+
+    deathYear: 1919,
+    deathPlace: null,
+
     fatherId: null,
     motherId: null,
 
-    spouseIds: ["8"],
+    spouseIds: ["13"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    13: {
+    id: "13",
+    firstName: "Ellen",
+    lastName: "Snee",
+
+    birthYear: 1864,
+    birthPlace: null,
+
+    deathYear: 1944,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["12"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    14: {
+    id: "14",
+    firstName: "Louis",
+    lastName: "Kline",
+
+    birthYear: 1874,
+    birthPlace: null,
+
+    deathYear: 1914,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["15"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    15: {
+    id: "15",
+    firstName: "Rose",
+    lastName: "Supple",
+
+    birthYear: 1876,
+    birthPlace: null,
+
+    deathYear: 1940,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["14"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    16: {
+    id: "16",
+    firstName: "Joseph",
+    lastName: "Palmisano",
+
+    birthYear: 1893,
+    birthPlace: null,
+
+    deathYear: 1992,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["17", "18"],
+
+    occupation: "Shoe Maker",
+
+    notes: "Joseph Palmisano was originally Guiseppe Palmisano before moving to America in 1908 when he was only 13 years old.",
+
+    sources: []
+  },
+    17: {
+    id: "17",
+    firstName: "Carmela",
+    lastName: "Muollo",
+
+    birthYear: 1896,
+    birthPlace: null,
+
+    deathYear: 1942,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["16"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    18: {
+    id: "18",
+    firstName: "Antoinette",
+    lastName: "Toni",
+
+    birthYear: 1901,
+    birthPlace: null,
+
+    deathYear: 1976,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["16"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    19: {
+    id: "19",
+    firstName: "Grace",
+    lastName: "Palmisano",
+
+    birthYear: 1918,
+    birthPlace: null,
+
+    deathYear: 2003,
+    deathPlace: "New York, USA",
+
+    fatherId: "16",
+    motherId: "17",
+
+    spouseIds: [],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    20: {
+    id: "20",
+    firstName: "Angelo",
+    lastName: "Palmisano",
+
+    birthYear: 1919,
+    birthPlace: null,
+
+    deathYear: 2012,
+    deathPlace: "Alabama, USA",
+
+    fatherId: "16",
+    motherId: "17",
+
+    spouseIds: [],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    21: {
+    id: "21",
+    firstName: "Mary",
+    lastName: "Palmisano",
+
+    birthYear: 1922,
+    birthPlace: null,
+
+    deathYear: "unknown",
+    deathPlace: null,
+
+    fatherId: "16",
+    motherId: "17",
+
+    spouseIds: [],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    22: {
+    id: "22",
+    firstName: "Anne",
+    lastName: "Palmisano",
+
+    birthYear: 1924,
+    birthPlace: null,
+
+    deathYear: 2009,
+    deathPlace: null,
+
+    fatherId: "16",
+    motherId: "17",
+
+    spouseIds: [],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+      23: {
+    id: "23",
+    firstName: "Joseph",
+    lastName: "Palmisano",
+
+    birthYear: 1926,
+    birthPlace: null,
+
+    deathYear: 2017,
+    deathPlace: "Endicott, Broome, New York, USA",
+
+    fatherId: "16",
+    motherId: "17",
+
+    spouseIds: [],
 
     occupation: null,
 

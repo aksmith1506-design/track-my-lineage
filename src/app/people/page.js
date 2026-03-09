@@ -12,10 +12,10 @@ export default function PeoplePage() {
 
   const peopleArray = Object.values(people);
 
-  // helper to find portrait
+  // helper to find portrait (handles multiple personIds)
   function getPortrait(personId) {
     const personDocs = documents
-      .filter(doc => doc.personId === personId)
+      .filter(doc => doc.personIds && doc.personIds.includes(personId)) // updated
       .sort((a, b) => b.relevance - a.relevance);
 
     return personDocs.find(doc =>
@@ -54,7 +54,6 @@ export default function PeoplePage() {
       <h1>People ({sorted.length})</h1>
 
       {/* SEARCH */}
-
       <input
         placeholder="Search people..."
         value={search}
@@ -69,7 +68,6 @@ export default function PeoplePage() {
       />
 
       {/* ALPHABET NAV */}
-
       <div
         style={{
           display: "flex",
@@ -90,15 +88,12 @@ export default function PeoplePage() {
       </div>
 
       {/* SURNAME SECTIONS */}
-
       {surnames.map(surname => {
 
         const firstLetter = surname[0].toUpperCase();
 
         return (
-
           <div key={surname} id={firstLetter} style={{ marginBottom: "40px" }}>
-
             <h2>{surname}</h2>
 
             <div
@@ -108,13 +103,11 @@ export default function PeoplePage() {
                 gap: "20px"
               }}
             >
-
               {grouped[surname].map(person => {
 
                 const portrait = getPortrait(person.id);
 
                 return (
-
                   <Link
                     key={person.id}
                     href={`/person/${createSlug(person)}`}
@@ -129,9 +122,7 @@ export default function PeoplePage() {
                       background: "#fafafa"
                     }}
                   >
-
                     {/* PORTRAIT */}
-
                     {portrait && (
                       <img
                         src={`/documents/${portrait.fileName}`}
@@ -146,9 +137,7 @@ export default function PeoplePage() {
                     )}
 
                     {/* INFO */}
-
                     <div>
-
                       <div style={{ fontWeight: "bold" }}>
                         {person.firstName} {person.lastName}
                       </div>
@@ -156,23 +145,16 @@ export default function PeoplePage() {
                       <div style={{ fontSize: "13px", color: "#555" }}>
                         {person.birthYear || "?"} – {person.deathYear || ""}
                       </div>
-
                     </div>
-
                   </Link>
-
                 );
 
               })}
-
             </div>
-
           </div>
-
         );
 
       })}
-
     </div>
   );
 }

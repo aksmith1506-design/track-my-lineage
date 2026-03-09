@@ -40,8 +40,10 @@ export default async function PersonPage({ params }) {
     person.birthYear &&
     new Date().getFullYear() - person.birthYear < 120;
 
+  /* UPDATED DOCUMENT FILTER */
+
   const personDocs = documents
-    .filter(doc => doc.personId === id)
+    .filter(doc => doc.personIds && doc.personIds.includes(id))
     .sort((a, b) => b.relevance - a.relevance);
 
   const mainPortrait = personDocs.find(doc =>
@@ -69,13 +71,11 @@ export default async function PersonPage({ params }) {
 
         <Link href="/" style={{ color: "#0077cc" }}>← Home</Link>
 
-        {/* NAME */}
-
         <h1 style={{ marginTop: "25px", marginBottom: "20px" }}>
           {person.firstName} {person.lastName}
         </h1>
 
-        {/* HEADER AREA */}
+        {/* HEADER */}
 
         <div
           style={{
@@ -85,8 +85,6 @@ export default async function PersonPage({ params }) {
             alignItems: "start"
           }}
         >
-
-          {/* PORTRAIT */}
 
           {mainPortrait && (
             <img
@@ -100,8 +98,6 @@ export default async function PersonPage({ params }) {
               }}
             />
           )}
-
-          {/* BASIC INFO */}
 
           <div>
 
@@ -121,11 +117,9 @@ export default async function PersonPage({ params }) {
               </p>
             )}
 
-            {/* SUMMARY */}
-
             <div style={{ marginTop: "20px" }}>
 
-              <h3>Summary</h3>
+              <b>Summary</b>
 
               <p>
 
@@ -166,6 +160,18 @@ export default async function PersonPage({ params }) {
             </div>
 
           </div>
+
+            {person.notes && (
+            <div style={{ marginTop: "30px" }}>
+
+                <b>Notes</b>
+
+                <p style={{ whiteSpace: "pre-line" }}>
+                {person.notes}
+                </p>
+
+            </div>
+            )}
 
         </div>
 
@@ -231,52 +237,48 @@ export default async function PersonPage({ params }) {
         </div>
 
         {/* DOCUMENTS */}
-
         <div style={{ marginTop: "60px" }}>
+        <h3>Documents</h3>
 
-          <h3>Documents</h3>
+        {personDocs.length === 0 && <p>No documents listed.</p>}
 
-          {personDocs.length === 0 && <p>No documents listed.</p>}
-
-          <div
+        <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))",
-              gap: "20px",
-              marginTop: "15px"
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill,minmax(120px,1fr))",
+            gap: "20px",
+            marginTop: "15px"
             }}
-          >
-
+        >
             {personDocs.map(doc => (
-
-              <div key={doc.id} style={{ textAlign: "center" }}>
-
+            <div key={doc.id} style={{ textAlign: "center" }}>
+                {/* Link image to document page */}
+                <Link href={`/document/${doc.id}`}>
                 <img
-                  src={`/documents/${doc.fileName}`}
-                  alt={doc.description}
-                  style={{
+                    src={`/documents/${doc.fileName}`}
+                    alt={doc.description}
+                    style={{
                     width: "100%",
                     borderRadius: "6px",
-                    boxShadow: "0 3px 8px rgba(0,0,0,0.25)"
-                  }}
+                    boxShadow: "0 3px 8px rgba(0,0,0,0.25)",
+                    cursor: "pointer"
+                    }}
                 />
+                </Link>
 
                 <div
-                  style={{
+                style={{
                     fontSize: "12px",
                     marginTop: "6px",
                     color: "#555"
-                  }}
+                }}
                 >
-                  {doc.description}
+                {doc.description}
                 </div>
 
-              </div>
-
+            </div>
             ))}
-
-          </div>
-
+        </div>
         </div>
 
       </main>
