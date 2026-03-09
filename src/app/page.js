@@ -1,150 +1,338 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { people } from "@/data/people";
 import { documents } from "@/data/documents";
 import { createSlug } from "@/lib/slug";
 
+const icons = {
+people: "👤",
+tree: "🌳",
+documents: "📄",
+about: "ℹ️",
+contact: "✉️",
+};
+
 export default function Home() {
+const peopleArray = Object.values(people);
+const totalPeople = peopleArray.length;
+const totalDocuments = documents.length;
 
-  const peopleArray = Object.values(people);
+const [featuredPerson, setFeaturedPerson] = useState(null);
 
-  const featured = peopleArray[0];
+function pickRandomPerson() {
+const random =
+peopleArray[Math.floor(Math.random() * peopleArray.length)];
+setFeaturedPerson(random);
+}
 
-  const totalPeople = peopleArray.length;
-  const totalDocuments = documents.length;
+useEffect(() => {
+pickRandomPerson();
+}, []);
 
-  return (
-    <main style={{ maxWidth: "1000px", margin: "auto", padding: "30px 20px" }}>
+const navCards = [
+{
+title: "People Index",
+desc: "Browse all individuals in the genealogy archive.",
+href: "/people",
+icon: icons.people,
+},
+{
+title: "Family Tree",
+desc: "Explore relationships through the interactive tree.",
+href: "/tree",
+icon: icons.tree,
+},
+{
+title: "Documents",
+desc: "View scanned historical documents.",
+href: "/documents",
+icon: icons.documents,
+},
+{
+title: "About This Project",
+desc: "Learn about the purpose and sources of this archive.",
+href: "/about",
+icon: icons.about,
+},
+{
+title: "Contact Us",
+desc: "Get in touch with the research team.",
+href: "/contact",
+icon: icons.contact,
+},
+];
 
-      {/* HERO */}
+return ( <main className="container">
 
-      <div style={{ marginBottom: "40px" }}>
-        <div style={{ fontSize: "34px", fontWeight: "bold", marginBottom: "10px" }}>
-          TrackMyLineage.com
+```
+  <section className="hero">
+    <h1>TrackMyLineage.com</h1>
+    <p>
+      A public genealogy research archive documenting the history
+      of the Smith family and related families across generations.
+    </p>
+  </section>
+
+  <section className="stats">
+
+    <Link href="/people" className="stat-card">
+      <div className="stat-icon">👤</div>
+      <div className="stat-number">{totalPeople}</div>
+      <div className="stat-label">People</div>
+    </Link>
+
+    <Link href="/documents" className="stat-card">
+      <div className="stat-icon">📄</div>
+      <div className="stat-number">{totalDocuments}</div>
+      <div className="stat-label">Documents</div>
+    </Link>
+
+  </section>
+
+  <section className="cards">
+    {navCards.map((card) => (
+      <Link key={card.title} href={card.href}>
+        <div className="card">
+          <div className="icon-circle">{card.icon}</div>
+          <h3>{card.title}</h3>
+          <p>{card.desc}</p>
+        </div>
+      </Link>
+    ))}
+  </section>
+
+  <section className="featured">
+
+    <h2>Featured Person</h2>
+
+    {featuredPerson && (
+      <div className="featured-card">
+
+        <div className="featured-name">
+          {featuredPerson.firstName} {featuredPerson.lastName}
         </div>
 
-        <p style={{ fontSize: "18px", color: "#555" }}>
-          A public genealogy research archive documenting the history
-          of the Smith family and related families across generations.
-        </p>
-      </div>
-
-      {/* STATS */}
-
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "30px",
-          marginBottom: "40px",
-          fontSize: "18px"
-        }}
-      >
-        <div>
-          <div style={{ fontWeight: "bold", fontSize: "24px" }}>
-            {totalPeople}
-          </div>
-          People
+        <div className="featured-dates">
+          {featuredPerson.birthYear || "?"} – {featuredPerson.deathYear || ""}
         </div>
 
-        <div>
-          <div style={{ fontWeight: "bold", fontSize: "24px" }}>
-            {totalDocuments}
-          </div>
-          Documents
-        </div>
-      </div>
-
-      {/* NAV CARDS */}
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))",
-          gap: "20px",
-          marginBottom: "50px"
-        }}
-      >
-
-        <Link href="/people" style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "20px",
-          textDecoration: "none",
-          color: "black",
-          background: "#fafafa"
-        }}>
-          <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "5px" }}>
-            People Index
-          </div>
-          Browse all individuals in the genealogy archive.
+        <Link
+          href={`/person/${createSlug(featuredPerson)}`}
+          className="featured-link"
+        >
+          View profile →
         </Link>
 
-        <Link href="/tree" style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "20px",
-          textDecoration: "none",
-          color: "black",
-          background: "#fafafa"
-        }}>
-          <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "5px" }}>
-            Family Tree
-          </div>
-          Explore relationships through the interactive tree.
-        </Link>
-
-        <Link href="/about" style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "20px",
-          textDecoration: "none",
-          color: "black",
-          background: "#fafafa"
-        }}>
-          <div style={{ fontWeight: "bold", fontSize: "18px", marginBottom: "5px" }}>
-            About This Project
-          </div>
-          Learn about the purpose and sources of this archive.
-        </Link>
+        <button
+          className="refresh-btn"
+          onClick={pickRandomPerson}
+        >
+          🔄 Random Person
+        </button>
 
       </div>
+    )}
 
-      {/* FEATURED */}
+  </section>
 
-      <div>
+  <style jsx>{`
 
-        <div style={{ fontWeight: "bold", fontSize: "22px", marginBottom: "10px" }}>
-          Featured Person
-        </div>
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      font-family: system-ui, sans-serif;
+      color: #1f2a35;
+    }
 
-        <div style={{
-          border: "1px solid #ddd",
-          borderRadius: "8px",
-          padding: "20px",
-          background: "#fafafa"
-        }}>
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
 
-          <div style={{ fontSize: "18px", fontWeight: "bold" }}>
-            {featured.firstName} {featured.lastName}
-          </div>
+    .hero p {
+      font-size: 1rem;
+      color: #555;
+    }
 
-          <div style={{ color: "#555", marginTop: "5px" }}>
-            {featured.birthYear || "?"} – {featured.deathYear || ""}
-          </div>
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin: 25px 0;
+    }
 
-          <div style={{ marginTop: "10px" }}>
-            <Link
-              href={`/person/${createSlug(featured)}`}
-              style={{ color: "#008cff" }}
-            >
-              View profile →
-            </Link>
-          </div>
+    .stat-card {
+      flex: 1;
+      background: linear-gradient(135deg,#e0f3ff,#fafafa);
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      min-height: 120px;
 
-        </div>
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-      </div>
+      text-decoration: none;
+      color: #1f2a35;
 
-    </main>
-  );
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .stat-number {
+      font-weight: bold;
+      font-size: 1.6rem;
+    }
+
+    .stat-label {
+      font-size: .95rem;
+      color: #555;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+
+      padding: 20px;
+      min-height: 180px;
+
+      text-decoration: none;
+      color: #1f2a35;
+
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+
+    .icon-circle {
+      width: 50px;
+      height: 50px;
+
+      border-radius: 50%;
+
+      background: #f0f4f8;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .card p {
+      font-size: .9rem;
+      color: #555;
+      text-align: center;
+    }
+
+    .featured {
+      margin-top: 40px;
+    }
+
+    .featured h2 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .featured-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background: #fafafa;
+      padding: 20px;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    .featured-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .featured-dates {
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .featured-link {
+      display: block;
+      margin-top: 8px;
+      color: #008cff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .featured-link:hover {
+      text-decoration: underline;
+    }
+
+    .refresh-btn {
+      margin-top: 12px;
+      border: none;
+      background: #f0f4f8;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: .9rem;
+    }
+
+    .refresh-btn:hover {
+      background: #e6edf5;
+    }
+
+    @media (max-width:500px) {
+      .stats {
+        flex-direction: column;
+      }
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  `}</style>
+
+</main>
+
+
+);
 }

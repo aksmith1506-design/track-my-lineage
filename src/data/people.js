@@ -97,7 +97,7 @@ export const people = {
     firstName: "Mark",
     lastName: "Smith",
 
-    birthYear: 1956,
+    birthYear: 1958,
     birthPlace: null,
 
     deathYear: null,
@@ -120,7 +120,7 @@ export const people = {
     firstName: "Susan",
     lastName: "Regan",
 
-    birthYear: 1958,
+    birthYear: 1957,
     birthPlace: null,
 
     deathYear: null,
