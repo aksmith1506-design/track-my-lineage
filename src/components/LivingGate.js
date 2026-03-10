@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 export default function LivingGate({ children, isLiving }) {
   const [unlocked, setUnlocked] = useState(false);
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const correctPassword =
     process.env.NEXT_PUBLIC_LIVING_PASSWORD || "family";
@@ -20,8 +21,9 @@ export default function LivingGate({ children, isLiving }) {
     if (password === correctPassword) {
       localStorage.setItem("livingUnlocked", "true");
       setUnlocked(true);
+      setError("");
     } else {
-      alert("Incorrect password");
+      setError("Incorrect password");
     }
   }
 
@@ -29,15 +31,35 @@ export default function LivingGate({ children, isLiving }) {
 
   if (!unlocked) {
     return (
-      <main style={{ maxWidth: "800px", margin: "auto", padding: "40px" }}>
-        <h1>Private Profile</h1>
+      <div
+        style={{
+          maxWidth: "500px",
+          margin: "60px auto",
+          padding: "30px",
+          textAlign: "center",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          background: "#fafafa"
+        }}
+      >
+        <h2 style={{ marginBottom: "10px" }}>Private Content</h2>
 
-        <p>
-          This individual may still be living. Enter the family password to
-          view the profile.
+        <p style={{ color: "#555", fontSize: "15px" }}>
+          This content may contain information about living individuals.
+          <br />
+          Enter the family password to continue.
         </p>
 
-        <form onSubmit={handleUnlock} style={{ marginTop: "20px" }}>
+        <form
+          onSubmit={handleUnlock}
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "10px"
+          }}
+        >
           <input
             type="password"
             placeholder="Family password"
@@ -47,7 +69,8 @@ export default function LivingGate({ children, isLiving }) {
               padding: "10px",
               borderRadius: "6px",
               border: "1px solid #ccc",
-              marginRight: "10px"
+              flex: "1",
+              minWidth: "160px"
             }}
           />
 
@@ -63,10 +86,22 @@ export default function LivingGate({ children, isLiving }) {
               cursor: "pointer"
             }}
           >
-            View Profile
+            Unlock
           </button>
         </form>
-      </main>
+
+        {error && (
+          <div
+            style={{
+              color: "red",
+              marginTop: "10px",
+              fontSize: "14px"
+            }}
+          >
+            {error}
+          </div>
+        )}
+      </div>
     );
   }
 
