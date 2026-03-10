@@ -14,7 +14,6 @@ export default function DocumentsPage() {
 
   const docs = [...documents].sort((a, b) => b.relevance - a.relevance);
 
-  // Automatically detect document types
   const docTypes = [...new Set(documents.map(doc => doc.type))];
 
   function isLiving(person) {
@@ -37,88 +36,95 @@ export default function DocumentsPage() {
 
   });
 
+  // Check if ANY document contains a living person
+  const containsLiving = filteredDocs.some(doc =>
+    (doc.personIds || []).some(id => {
+      const person = people[id];
+      return person && isLiving(person);
+    })
+  );
+
   return (
-    <main style={{ maxWidth: "1100px", margin: "auto", padding: "30px 20px" }}>
 
-      <Link href="/" style={{ color: "#0077cc" }}>← Home</Link>
+    <LivingGate isLiving={containsLiving}>
 
-      <h1 style={{ marginTop: "20px" }}>Documents</h1>
+      <main style={{ maxWidth: "1100px", margin: "auto", padding: "30px 20px" }}>
 
-      <p style={{ color: "#555", marginBottom: "25px", maxWidth: "700px" }}>
-        A collection of photographs, records, and archival documents related to
-        individuals in this genealogy archive.
-      </p>
+        <Link href="/" style={{ color: "#0077cc" }}>← Home</Link>
 
-      {/* SEARCH + FILTER */}
+        <h1 style={{ marginTop: "20px" }}>Documents</h1>
 
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "10px",
-          marginBottom: "30px"
-        }}
-      >
+        <p style={{ color: "#555", marginBottom: "25px", maxWidth: "700px" }}>
+          A collection of photographs, records, and archival documents related to
+          individuals in this genealogy archive.
+        </p>
 
-        <input
-          type="text"
-          placeholder="Search documents..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+        {/* SEARCH + FILTER */}
+
+        <div
           style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-            flex: "1",
-            minWidth: "180px"
-          }}
-        />
-
-        <select
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-          style={{
-            padding: "8px",
-            borderRadius: "6px",
-            border: "1px solid #ccc"
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "10px",
+            marginBottom: "30px"
           }}
         >
 
-          <option value="">All Types</option>
+          <input
+            type="text"
+            placeholder="Search documents..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              padding: "8px",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
+              flex: "1",
+              minWidth: "180px"
+            }}
+          />
 
-          {docTypes.map(type => (
-            <option key={type} value={type}>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
-            </option>
-          ))}
+          <select
+            value={typeFilter}
+            onChange={(e) => setTypeFilter(e.target.value)}
+            style={{
+              padding: "8px",
+              borderRadius: "6px",
+              border: "1px solid #ccc"
+            }}
+          >
 
-        </select>
+            <option value="">All Types</option>
 
-      </div>
+            {docTypes.map(type => (
+              <option key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </option>
+            ))}
 
-      {/* DOCUMENT GRID */}
+          </select>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-          gap: "25px"
-        }}
-      >
+        </div>
 
-        {filteredDocs.map(doc => {
+        {/* DOCUMENT GRID */}
 
-          const linkedPeople = (doc.personIds || [])
-            .map(id => people[id])
-            .filter(Boolean);
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
+            gap: "25px"
+          }}
+        >
 
-          const hasLivingPerson = linkedPeople.some(p => isLiving(p));
+          {filteredDocs.map(doc => {
 
-          return (
+            const linkedPeople = (doc.personIds || [])
+              .map(id => people[id])
+              .filter(Boolean);
 
-            <LivingGate key={doc.id} isLiving={hasLivingPerson}>
+            return (
 
-              <div style={{ textAlign: "center" }}>
+              <div key={doc.id} style={{ textAlign: "center" }}>
 
                 <Link href={`/document/${doc.id}`}>
 
@@ -135,8 +141,6 @@ export default function DocumentsPage() {
 
                 </Link>
 
-                {/* Document description */}
-
                 <div
                   style={{
                     fontSize: "13px",
@@ -147,8 +151,6 @@ export default function DocumentsPage() {
                   {doc.description}
                 </div>
 
-                {/* Document type */}
-
                 <div
                   style={{
                     fontSize: "11px",
@@ -158,8 +160,6 @@ export default function DocumentsPage() {
                 >
                   {doc.type}
                 </div>
-
-                {/* Linked people */}
 
                 {linkedPeople.length > 0 && (
                   <div
@@ -192,14 +192,15 @@ export default function DocumentsPage() {
 
               </div>
 
-            </LivingGate>
+            );
 
-          );
+          })}
 
-        })}
+        </div>
 
-      </div>
+      </main>
 
-    </main>
+    </LivingGate>
+
   );
 }
