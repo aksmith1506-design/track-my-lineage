@@ -119,5 +119,13 @@ export const documents = [
     relevance: 10,              // higher = more important
     description: "Photograph of Kathryn Baldwin."
   },
+    {
+    id: "16",
+    personIds: ["25", "26"],            
+    fileName: "GuiseppeMuloMariaLagalanteMarriage.jpg",
+    type: "Record",              // photo, certificate, record, etc.
+    relevance: 8,              // higher = more important
+    description: "Marriage Records of Guiseppe Mullo and Maria Lagalante."
+  },
 
 ];

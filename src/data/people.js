@@ -58,7 +58,7 @@ export const people = {
     deathPlace: null,
 
     fatherId: "7",
-    motherId: null,
+    motherId: "24",
 
     spouseIds: ["2"],
 
@@ -152,7 +152,7 @@ export const people = {
     fatherId: null,
     motherId: null,
 
-    spouseIds: [],
+    spouseIds: ["24"],
 
     occupation: null,
 
@@ -369,8 +369,8 @@ export const people = {
     deathYear: 1942,
     deathPlace: null,
 
-    fatherId: null,
-    motherId: null,
+    fatherId: "25",
+    motherId: "26",
 
     spouseIds: ["16"],
 
@@ -490,7 +490,7 @@ export const people = {
 
     sources: []
   },
-      23: {
+    23: {
     id: "23",
     firstName: "Joseph",
     lastName: "Palmisano",
@@ -512,5 +512,70 @@ export const people = {
 
     sources: []
   },
+    24: {
+    id: "24",
+    firstName: "Linda",
+    lastName: "Howe",
 
+    birthYear: 1955,
+    birthPlace: null,
+
+    deathYear: null,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["7"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+    25: {
+    id: "25",
+    firstName: "Guiseppe",
+    lastName: "Muollo",
+
+    birthYear: 1860,
+    birthPlace: "Monopoli, Italy",
+
+    deathYear: null,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["26"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
+      26: {
+    id: "26",
+    firstName: "Maria",
+    lastName: "Lagalante",
+
+    birthYear: 1860,
+    birthPlace: "Monopoli, Italy",
+
+    deathYear: null,
+    deathPlace: null,
+
+    fatherId: null,
+    motherId: null,
+
+    spouseIds: ["25"],
+
+    occupation: null,
+
+    notes: "",
+
+    sources: []
+  },
 };
